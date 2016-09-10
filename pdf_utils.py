@@ -1,3 +1,14 @@
+"""
+A collection of utility functions for handling PDF files.
+
+Requires:
+
+comtypes
+PyPDF2
+progressbar
+
+"""
+
 from __future__ import unicode_literals, print_function
 
 import os
@@ -28,6 +39,9 @@ def get_files_of_type(path, types):
 
 
 def get_dir():
+    """
+    GUI popup for directory selection.
+    """
     window = tkinter.Tk()
     window.withdraw()
     target_dir = askdirectory()
