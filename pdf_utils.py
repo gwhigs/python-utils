@@ -1,7 +1,6 @@
 from __future__ import unicode_literals, print_function
 
 import os
-import shutil
 
 from six.moves import tkinter
 from six.moves.tkinter_filedialog import askdirectory
