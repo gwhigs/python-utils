@@ -13,11 +13,18 @@ from __future__ import unicode_literals, print_function
 
 import os
 
-from six.moves import tkinter
-from six.moves.tkinter_filedialog import askdirectory
 from comtypes import client
 import PyPDF2
 import progressbar
+
+# Only use TK when it's available
+try:
+    from six.moves import tkinter
+    from six.moves.tkinter_filedialog import askdirectory
+
+    USE_TK = True
+except ImportError:
+    USE_TK = False
 
 
 COMTYPES_PDF_FORMAT = 17
@@ -42,11 +49,18 @@ def get_dir():
     """
     GUI popup for directory selection.
     """
-    window = tkinter.Tk()
-    window.withdraw()
-    target_dir = askdirectory()
-    window.destroy()
-    return os.path.normpath(target_dir)
+    if USE_TK:
+        window = tkinter.Tk()
+        window.withdraw()
+        target_dir = askdirectory()
+        window.destroy()
+        return os.path.normpath(target_dir)
+    else:
+        path = input('Enter path:')
+        target_dir = os.path.abspath(path)
+        if not os.path.isdir():
+            raise Exception('Path is not a valid directory.')
+        return target_dir
 
 
 def check_tmp_path(tmp_path):
