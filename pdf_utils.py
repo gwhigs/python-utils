@@ -48,6 +48,8 @@ def get_files_of_type(path, types):
 def get_dir():
     """
     GUI popup for directory selection.
+
+    Defaults to text input if Tkinter isn't available.
     """
     if USE_TK:
         window = tkinter.Tk()
