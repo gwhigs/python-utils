@@ -1,2 +1,2 @@
 # python-utils
-A ragtag collection of Python utility functions
+A collection of Python utility functions
