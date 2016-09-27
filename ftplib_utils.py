@@ -5,6 +5,10 @@ import ftplib
 import os
 
 
+class FTPUtilsException(Exception):
+    pass
+
+
 class ServerAddressMixin(object):
     """
     Mixin for ftplib's FTP class.
@@ -59,7 +63,8 @@ def upload_file_to_remote(bytes_file_obj, filename, target_ftp, target_path):
     Stores a file on a remote FTP server.
     Note: file_obj must be opened in bytes mode.
     """
-    assert (bytes_file_obj.mode == 'rb')
+    if bytes_file_obj.mode != 'rb':
+        raise FTPUtilsException('File must be opened in bytes mode.')
     cmd = 'STOR {}/{}'.format(target_path, filename)
     target_ftp.storbinary(cmd, bytes_file_obj)
 
