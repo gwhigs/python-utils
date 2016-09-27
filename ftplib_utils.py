@@ -1,4 +1,8 @@
+"""
+A collection of utility functions for dealing with FTP servers.
+"""
 import ftplib
+import os
 
 
 class ServerAddressMixin(object):
@@ -48,3 +52,32 @@ def get_ftp(url, user, password, port=21, secure=False):
     if secure:
         ftp.prot_p()
     return ftp
+
+
+def upload_file_to_remote(bytes_file_obj, filename, target_ftp, target_path):
+    """
+    Stores a file on a remote FTP server.
+    Note: file_obj must be opened in bytes mode.
+    """
+    assert (bytes_file_obj.mode == 'rb')
+    cmd = 'STOR {}/{}'.format(target_path, filename)
+    target_ftp.storbinary(cmd, bytes_file_obj)
+
+
+def get_filenames(path):
+    """
+    Returns a list of all non-directory file names for a given path.
+    """
+    _path, _dirnames, filenames = next(os.walk(path))
+    return filenames
+
+
+def upload_all_to_remote(path, target_ftp, target_path):
+    """
+    Uploads all files in a given directory to a server via FTP.
+    """
+    files = get_filenames(path)
+    for fn in files:
+        with open(os.path.join(path, fn), 'rb') as f:
+            upload_file_to_remote(f, fn, target_ftp, target_path)
+            print('Report uploaded to server: {}'.format(fn))
